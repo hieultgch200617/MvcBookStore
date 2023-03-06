@@ -1,0 +1,85 @@
+﻿@using MvcBookStore.Models
+@using PagedList.Mvc;
+@model PagedList.PagedList<MvcBookStore.Models.CHITIETDONTHANG>
+@{
+    ViewBag.Title = "Quản lí đơn hàng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<style>
+    tr, td, th {
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid black;
+    }
+
+    table {
+        border: 1px solid black;
+    }
+
+    #imggh {
+        width: 100px;
+        height: 150px;
+    }
+
+    a {
+        font-weight: bold;
+    }
+
+    .Trang li {
+        display: inline;
+        letter-spacing: 20px;
+    }
+
+    .Trang a:active {
+        background-color: green;
+        text-decoration-color: green;
+    }
+
+    #more {
+        border: 0px solid black;
+        width: 300px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+    }
+</style>
+<h2>@ViewBag.Title</h2>
+
+<table>
+    <tr>
+        <th>Mã đơn hàng</th>
+        <th>Mã sách</th>
+        <th>Số lượng</th>
+        <th>Đơn giá</th>
+        <th style="width:80px">Thao Tác</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.MaDonHang)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SACH.Tensach)
+    </td>
+    <td id="more" class="text-left">
+        @Html.DisplayFor(modelItem => item.Soluong)
+    </td>
+    <td>
+        @String.Format("{0:#,##0}", @item.Dongia)
+    </td>
+    <td>
+        @Html.ActionLink("Sửa", "Suadon", new { id = item.MaDonHang })
+        <br />
+        @Html.ActionLink("Chi tiết", "Chitietsach", new { id = item.MaDonHang })
+    </td>
+</tr>
+    }
+</table>
+<div class="Trang">
+    Trang @(Model.PageCount<Model.PageNumber?0:Model.PageNumber)/@Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("DonHang", new { page = page }))
+</div>
